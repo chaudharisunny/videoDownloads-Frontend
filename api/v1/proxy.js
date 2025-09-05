@@ -1,15 +1,12 @@
-import Buffer from 'buffer'
+import { Buffer } from "buffer";
+
 export default async function handler(req, res) {
   const { url } = req.query;
-
-  if (!url) {
-    return res.status(400).json({ error: "URL is required" });
-  }
+  if (!url) return res.status(400).json({ error: "URL is required" });
 
   try {
     const response = await fetch(url);
 
-    // Set same headers so video/image can stream
     res.setHeader("Content-Type", response.headers.get("content-type"));
     res.setHeader("Cache-Control", "public, max-age=86400");
 

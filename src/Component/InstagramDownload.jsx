@@ -35,7 +35,7 @@ export default function InstagramDownload() {
 
     try {
       // 🔹 use relative API route for Vercel
-      const res = await axios.post("/api/downloadpost", { url });
+      const res = await axios.post("/api/v1/downloadpost", { url });
 
       console.log("Media Data:", res.data);
       setMediaData(res.data);
@@ -86,14 +86,14 @@ export default function InstagramDownload() {
           {mediaData?.type === "image" && (
             <>
               <img
-                src={`/api/proxy?url=${encodeURIComponent(mediaData.imageUrl)}`}
+                src={`/api/v1/proxy?url=${encodeURIComponent(mediaData.imageUrl)}`}
                 alt="Instagram Post"
                 className="mx-auto rounded-lg shadow-md mb-4 w-full h-80 object-contain"
               />
               <button
                 onClick={() =>
                   downloadFile(
-                    `/api/proxy?url=${encodeURIComponent(mediaData.imageUrl)}`,
+                    `/api/v1/proxy?url=${encodeURIComponent(mediaData.imageUrl)}`,
                     "instagram-image.jpg"
                   )
                 }
@@ -112,14 +112,14 @@ export default function InstagramDownload() {
                 className="mx-auto rounded-lg shadow-md mb-4 max-h-80"
               >
                 <source
-                  src={`/api/proxy?url=${encodeURIComponent(mediaData.videoUrl)}`}
+                  src={`/api/v1/proxy?url=${encodeURIComponent(mediaData.videoUrl)}`}
                   type="video/mp4"
                 />
               </video>
               <button
                 onClick={() =>
                   downloadFile(
-                    `/api/proxy?url=${encodeURIComponent(mediaData.videoUrl)}`,
+                    `/api/v1/proxy?url=${encodeURIComponent(mediaData.videoUrl)}`,
                     "instagram-video.mp4"
                   )
                 }

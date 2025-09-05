@@ -4,26 +4,24 @@ export default async function handler(req, res) {
   }
 
   const { url } = req.body;
-
   if (!url || url.trim() === "") {
     return res.status(400).json({ error: "URL is required" });
   }
 
   try {
-    // Temporary: return fake data (replace with your scraping logic later)
-    const isVideo = url.includes("video");
+    const isVideo = url.includes("video"); // placeholder logic
 
     if (isVideo) {
       return res.status(200).json({
         success: true,
         type: "video",
-        videoUrl: "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4"
+        videoUrl: "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4",
       });
     } else {
       return res.status(200).json({
         success: true,
         type: "image",
-        imageUrl: "https://via.placeholder.com/600x400.png"
+        imageUrl: "https://via.placeholder.com/600x400.png",
       });
     }
   } catch (err) {
