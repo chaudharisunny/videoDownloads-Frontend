@@ -34,9 +34,8 @@ export default function InstagramDownload() {
     setMediaData(null);
 
     try {
-      const res = await axios.post("http://localhost:3000/api/v1/downloadpost", {
-        url,
-      });
+      // 🔹 use relative API route for Vercel
+      const res = await axios.post("/api/downloadpost", { url });
 
       console.log("Media Data:", res.data);
       setMediaData(res.data);
@@ -87,18 +86,14 @@ export default function InstagramDownload() {
           {mediaData?.type === "image" && (
             <>
               <img
-                src={`http://localhost:3000/api/v1/proxy?url=${encodeURIComponent(
-                  mediaData.imageUrl
-                )}`}
+                src={`/api/proxy?url=${encodeURIComponent(mediaData.imageUrl)}`}
                 alt="Instagram Post"
                 className="mx-auto rounded-lg shadow-md mb-4 w-full h-80 object-contain"
               />
               <button
                 onClick={() =>
                   downloadFile(
-                    `http://localhost:3000/api/v1/proxy?url=${encodeURIComponent(
-                      mediaData.imageUrl
-                    )}`,
+                    `/api/proxy?url=${encodeURIComponent(mediaData.imageUrl)}`,
                     "instagram-image.jpg"
                   )
                 }
@@ -117,18 +112,14 @@ export default function InstagramDownload() {
                 className="mx-auto rounded-lg shadow-md mb-4 max-h-80"
               >
                 <source
-                  src={`http://localhost:3000/api/v1/proxy?url=${encodeURIComponent(
-                    mediaData.videoUrl
-                  )}`}
+                  src={`/api/proxy?url=${encodeURIComponent(mediaData.videoUrl)}`}
                   type="video/mp4"
                 />
               </video>
               <button
                 onClick={() =>
                   downloadFile(
-                    `http://localhost:3000/api/v1/proxy?url=${encodeURIComponent(
-                      mediaData.videoUrl
-                    )}`,
+                    `/api/proxy?url=${encodeURIComponent(mediaData.videoUrl)}`,
                     "instagram-video.mp4"
                   )
                 }
