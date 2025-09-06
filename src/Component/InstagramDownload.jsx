@@ -7,6 +7,7 @@ export default function InstagramDownload() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // ✅ Blob-based download (safe for images & videos)
   const downloadFile = async (fileUrl, filename) => {
     try {
       const response = await fetch(fileUrl);
@@ -33,8 +34,11 @@ export default function InstagramDownload() {
     setMediaData(null);
 
     try {
-      // ✅ Relative URL works on Vercel
-      const res = await axios.post("/api/v1/downloadpost", { url });
+      const res = await axios.post("http://localhost:3000/api/v1/downloadpost", {
+        url,
+      });
+
+      console.log("Media Data:", res.data);
       setMediaData(res.data);
     } catch (err) {
       console.error(err);
@@ -46,10 +50,12 @@ export default function InstagramDownload() {
 
   return (
     <div className="max-w-2xl mx-auto mt-20 p-6 bg-white shadow-lg rounded-xl">
+      {/* Header */}
       <div className="mb-6 border-b pb-3">
         <h1 className="text-2xl font-bold">Instagram Downloader</h1>
       </div>
 
+      {/* Input */}
       <div className="flex gap-2">
         <input
           type="text"
@@ -71,21 +77,28 @@ export default function InstagramDownload() {
         </button>
       </div>
 
+      {/* Error */}
       {error && <p className="text-red-500 text-center mt-4">{error}</p>}
 
+      {/* Media Section */}
       {mediaData?.success && (
         <div className="mt-6 text-center space-y-6">
+          {/* Image */}
           {mediaData?.type === "image" && (
             <>
               <img
-                src={`/api/v1/proxy?url=${encodeURIComponent(mediaData.imageUrl)}`}
+                src={`http://localhost:3000/api/v1/proxy?url=${encodeURIComponent(
+                  mediaData.imageUrl
+                )}`}
                 alt="Instagram Post"
                 className="mx-auto rounded-lg shadow-md mb-4 w-full h-80 object-contain"
               />
               <button
                 onClick={() =>
                   downloadFile(
-                    `/api/v1/proxy?url=${encodeURIComponent(mediaData.imageUrl)}`,
+                    `http://localhost:3000/api/v1/proxy?url=${encodeURIComponent(
+                      mediaData.imageUrl
+                    )}`,
                     "instagram-image.jpg"
                   )
                 }
@@ -96,6 +109,7 @@ export default function InstagramDownload() {
             </>
           )}
 
+          {/* Video */}
           {mediaData?.type === "video" && (
             <>
               <video
@@ -103,14 +117,18 @@ export default function InstagramDownload() {
                 className="mx-auto rounded-lg shadow-md mb-4 max-h-80"
               >
                 <source
-                  src={`/api/v1/proxy?url=${encodeURIComponent(mediaData.videoUrl)}`}
+                  src={`http://localhost:3000/api/v1/proxy?url=${encodeURIComponent(
+                    mediaData.videoUrl
+                  )}`}
                   type="video/mp4"
                 />
               </video>
               <button
                 onClick={() =>
                   downloadFile(
-                    `/api/v1/proxy?url=${encodeURIComponent(mediaData.videoUrl)}`,
+                    `http://localhost:3000/api/v1/proxy?url=${encodeURIComponent(
+                      mediaData.videoUrl
+                    )}`,
                     "instagram-video.mp4"
                   )
                 }
