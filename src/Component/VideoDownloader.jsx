@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../api/axios"; // use the centralized axios instance
 
 export default function VideoDownloader() {
   const [url, setUrl] = useState("");
@@ -14,7 +14,7 @@ export default function VideoDownloader() {
     setVideoData(null);
 
     try {
-      const res = await axios.post("http://localhost:3000/api/v1/youtubepost", { url });
+      const res = await api.post("/youtubepost", { url });
       if (res.data.success) {
         setVideoData(res.data);
       } else {
@@ -63,7 +63,6 @@ export default function VideoDownloader() {
       {/* Media Section */}
       {videoData && (
         <div className="mt-6 text-center">
-          {/* Thumbnail */}
           {videoData.thumbnail && (
             <img
               src={videoData.thumbnail}
@@ -72,12 +71,10 @@ export default function VideoDownloader() {
             />
           )}
 
-          {/* Info */}
           <h2 className="text-lg font-semibold mb-2">{videoData.title}</h2>
           <p className="text-sm text-gray-600 mb-1">By {videoData.author}</p>
           <p className="text-sm text-gray-600 mb-4">Duration: {videoData.duration}s</p>
 
-          {/* Download Buttons */}
           <div className="flex flex-col gap-3 mt-4">
             <a
               href={videoData.video}
