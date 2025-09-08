@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import api from "../api/axios"; // use the centralized axios instance
+import api from "../api/axios"; // centralized Axios instance
 
 export default function VideoDownloader() {
   const [url, setUrl] = useState("");
@@ -15,14 +15,24 @@ export default function VideoDownloader() {
 
     try {
       const res = await api.post("/youtubepost", { url });
+
       if (res.data.success) {
         setVideoData(res.data);
       } else {
-        setError("Failed to fetch video.");
+        setError("Failed to fetch video. Please try again.");
       }
     } catch (err) {
-      console.error(err);
-      setError("Error fetching video. Try again.");
+      console.error("Axios Error:", err);
+
+      if (err.response) {
+        // Backend responded with error
+        setError(err.response.data.message || "Backend returned an error.");
+      } else if (err.request) {
+        // Request made but no response (likely Render asleep or network issue)
+        setError("No response from server. Backend may be asleep. Try again.");
+      } else {
+        setError("Error fetching video. Please check the URL.");
+      }
     } finally {
       setLoading(false);
     }
@@ -73,23 +83,29 @@ export default function VideoDownloader() {
 
           <h2 className="text-lg font-semibold mb-2">{videoData.title}</h2>
           <p className="text-sm text-gray-600 mb-1">By {videoData.author}</p>
-          <p className="text-sm text-gray-600 mb-4">Duration: {videoData.duration}s</p>
+          <p className="text-sm text-gray-600 mb-4">
+            Duration: {videoData.duration}s
+          </p>
 
           <div className="flex flex-col gap-3 mt-4">
-            <a
-              href={videoData.video}
-              download="youtube-video.mp4"
-              className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm"
-            >
-              ⬇️ Download MP4
-            </a>
-            <a
-              href={videoData.audio}
-              download="youtube-audio.mp3"
-              className="inline-block bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-sm"
-            >
-              🎵 Download MP3
-            </a>
+            {videoData.video && (
+              <a
+                href={videoData.video}
+                download="youtube-video.mp4"
+                className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm"
+              >
+                ⬇️ Download MP4
+              </a>
+            )}
+            {videoData.audio && (
+              <a
+                href={videoData.audio}
+                download="youtube-audio.mp3"
+                className="inline-block bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-sm"
+              >
+                🎵 Download MP3
+              </a>
+            )}
           </div>
         </div>
       )}
