@@ -1,11 +1,15 @@
-import axios from "axios";
+import axios from 'axios';
 
 const api = axios.create({
-  baseURL:
-    import.meta.env.VITE_API_URL ||
-    (import.meta.env.DEV
-      ? "http://localhost:3000/api/v1"
-      : "https://your-backend.onrender.com/api/v1"),
+  baseURL: 'https://viideodownloadapis.onrender.com/api/v1',
 });
 
-export default api;
+const downloadVideo = async (videoUrl) => {
+  try {
+    const res = await api.post('/youtubepost', { url: videoUrl });
+    console.log(res.data);
+  } catch (err) {
+    console.error(err);
+  }
+};
+export default downloadVideo
