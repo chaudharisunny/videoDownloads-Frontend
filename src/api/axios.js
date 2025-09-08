@@ -1,33 +1,30 @@
+// src/api/axios.js
 import axios from 'axios';
 
-// 1. Use full Render backend URL (you already did)
- const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL; // Render backend URL
 
+// Axios instance
 const api = axios.create({
   baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json', // ensures JSON is sent
-  },
-  timeout: 10000, // optional: 10 sec timeout
+  headers: { 'Content-Type': 'application/json' },
+  timeout: 15000, // 15 sec timeout
 });
 
-// 2. Video download function
-const downloadVideo = async (videoUrl) => {
+// Optional helper function
+export const downloadVideo = async (videoUrl) => {
   try {
     const res = await api.post('/youtubepost', { url: videoUrl });
-    console.log(res.data);
-    return res.data; // return data so components can use it
+    return res.data;
   } catch (err) {
-    // 3. Improved error logging
     if (err.response) {
-      console.error('Server responded with error:', err.response.data);
+      console.error('Server error:', err.response.data);
     } else if (err.request) {
-      console.error('No response received from server:', err.request);
+      console.error('No response from server:', err.request);
     } else {
       console.error('Axios error:', err.message);
     }
-    throw err; // re-throw if needed
+    throw err;
   }
 };
 
-export default downloadVideo;
+export default api; // ✅ export Axios instance for direct use

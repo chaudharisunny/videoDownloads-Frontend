@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import api from "../api/axios"; // centralized Axios instance
+import api from "../api/axios"; // Axios instance
+// Or you could use: import { downloadVideo } from "../api/axios";
 
 export default function VideoDownloader() {
   const [url, setUrl] = useState("");
@@ -9,11 +10,13 @@ export default function VideoDownloader() {
 
   const handleDownload = async () => {
     if (!url.trim()) return;
+
     setLoading(true);
     setError("");
     setVideoData(null);
 
     try {
+      // Using Axios instance directly
       const res = await api.post("/youtubepost", { url });
 
       if (res.data.success) {
@@ -25,11 +28,11 @@ export default function VideoDownloader() {
       console.error("Axios Error:", err);
 
       if (err.response) {
-        // Backend responded with error
         setError(err.response.data.message || "Backend returned an error.");
       } else if (err.request) {
-        // Request made but no response (likely Render asleep or network issue)
-        setError("No response from server. Backend may be asleep. Try again.");
+        setError(
+          "No response from server. Backend may be asleep or network issue."
+        );
       } else {
         setError("Error fetching video. Please check the URL.");
       }
@@ -40,12 +43,10 @@ export default function VideoDownloader() {
 
   return (
     <div className="max-w-2xl mx-auto mt-20 p-6 bg-white shadow-lg rounded-xl">
-      {/* Header */}
       <div className="mb-6 border-b pb-3">
         <h1 className="text-2xl font-bold text-red-600">YouTube Downloader</h1>
       </div>
 
-      {/* Input */}
       <div className="flex gap-2">
         <input
           type="text"
@@ -58,19 +59,15 @@ export default function VideoDownloader() {
           onClick={handleDownload}
           disabled={loading}
           className={`px-4 py-2 rounded-lg text-white ${
-            loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-red-600 hover:bg-red-700"
+            loading ? "bg-gray-400 cursor-not-allowed" : "bg-red-600 hover:bg-red-700"
           }`}
         >
           {loading ? "Loading..." : "Fetch"}
         </button>
       </div>
 
-      {/* Error */}
       {error && <p className="text-red-500 text-center mt-4">{error}</p>}
 
-      {/* Media Section */}
       {videoData && (
         <div className="mt-6 text-center">
           {videoData.thumbnail && (
@@ -80,12 +77,9 @@ export default function VideoDownloader() {
               className="mx-auto rounded-lg shadow-md mb-4 w-full h-80 object-contain bg-cover"
             />
           )}
-
           <h2 className="text-lg font-semibold mb-2">{videoData.title}</h2>
           <p className="text-sm text-gray-600 mb-1">By {videoData.author}</p>
-          <p className="text-sm text-gray-600 mb-4">
-            Duration: {videoData.duration}s
-          </p>
+          <p className="text-sm text-gray-600 mb-4">Duration: {videoData.duration}s</p>
 
           <div className="flex flex-col gap-3 mt-4">
             {videoData.video && (
