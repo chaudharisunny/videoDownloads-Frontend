@@ -6,7 +6,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   const links = [
-    { name: "YouTube", path: "/youtube" },
+    { name: "YouTube", path: "/youtubepost" },
     { name: "Instagram", path: "/instagramDownload" },
     { name: "Twitter/X", path: "/twitterDownload" },
     { name: "Facebook", path: "/facebookDownload" },
