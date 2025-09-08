@@ -27,7 +27,7 @@ function App() {
           />
 
           {/* Video Downloaders */}
-          <Route path="/youtube" element={<VideoDownloader />} />
+          <Route path="/youtubepost" element={<VideoDownloader />} />
           <Route path="/instagramDownload" element={<InstagramDownload />} />
           <Route path="/facebookDownload" element={<FacebookDownload />} />
           <Route path="/twitterDownload" element={<TwitterDownload />} />
